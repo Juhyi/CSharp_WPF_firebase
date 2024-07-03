@@ -1,0 +1,31 @@
+﻿<Window x:Class="smartbox_function1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:smartbox_function1"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="1400" Loaded="Window_Loaded">
+    <Grid Margin="-10,16,10,-16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="117*"/>
+            <ColumnDefinition Width="475*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Content="전화번호" HorizontalAlignment="Left" Margin="23,58,0,0" VerticalAlignment="Top" Height="36" Width="91" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2"/>
+        <TextBox Name="txtphone" HorizontalAlignment="Left" Margin="126,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="563" Height="43" FontSize="20" Grid.ColumnSpan="3"/>
+        <Button Name="btnBox1" Content="Box 1" HorizontalAlignment="Left" Margin="126,122,0,0" VerticalAlignment="Top" Height="90" Width="270" RenderTransformOrigin="0.525,1.432" FontSize="24" FontWeight="Bold" Click="btnBox_Click" Grid.ColumnSpan="3" />
+        <Button Name="btnBox2" Content="Box 2" HorizontalAlignment="Left" Margin="142,122,0,0" VerticalAlignment="Top" Height="90" Width="270" FontSize="24" FontWeight="Bold" Click="btnBox_Click" Grid.Column="2"/>
+        <Button Name="btnBox3" Content="Box 3" HorizontalAlignment="Left" Margin="126,222,0,0" VerticalAlignment="Top" Height="92" Width="270" FontSize="24" FontWeight="Bold" Click="btnBox_Click" Grid.ColumnSpan="3"/>
+        <Button Name="btnBox4" Content="Box 4" HorizontalAlignment="Left" Margin="142,224,0,0" VerticalAlignment="Top" Height="88" Width="270" FontSize="24" FontWeight="Bold" Click="btnBox_Click" Grid.Column="2"/>
+        <Label Content="" HorizontalAlignment="Left" Margin="579,240,0,0" VerticalAlignment="Top" Height="36" Width="91" FontSize="18" FontWeight="Bold" Grid.Column="2" RenderTransformOrigin="1.366,0.584"/>
+        <Button Content="찾기" HorizontalAlignment="Left" Margin="873,340,0,0" VerticalAlignment="Top" Height="68" Width="194" FontSize="24" FontWeight="Bold" Background="#FF6BD0E4" Grid.Column="2"/>
+        <TextBox Name="txtBox" HorizontalAlignment="Left" Margin="640,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="427" Height="173" FontSize="20" Text="" Grid.Column="2"/>
+        <Button Content="보관" HorizontalAlignment="Left" Margin="126,330,0,0" VerticalAlignment="Top" Height="68" Width="563" FontSize="24" FontWeight="Bold" Background="#FF6BD0E4" Click="Button_Click" Grid.ColumnSpan="3"/>
+        <Button Name="Serchbtn" Content="검색" HorizontalAlignment="Left" Margin="640,340,0,0" VerticalAlignment="Top" Height="68" Width="194" FontSize="24" FontWeight="Bold" Background="#FF6BD0E4" Grid.Column="2" Click="Serchbtn_Click"/>
+        <Label Content="전화번호" HorizontalAlignment="Left" Margin="624,83,0,0" VerticalAlignment="Top" Height="36" Width="91" FontSize="18" FontWeight="Bold" Grid.Column="2"/>
+        <TextBox x:Name="TxtSearchPhone" HorizontalAlignment="Left" Margin="737,80,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="347" Height="42" FontSize="20" Grid.Column="2"/>
+
+    </Grid>
+</Window>

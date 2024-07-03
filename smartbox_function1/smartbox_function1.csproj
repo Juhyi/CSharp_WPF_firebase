@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="test-325e6-firebase-adminsdk-rnle1-bcd2252ffe.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="test-325e6-firebase-adminsdk-rnle1-bcd2252ffe.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Cloud.Firestore" Version="3.8.0" />
+  </ItemGroup>
+
+</Project>
