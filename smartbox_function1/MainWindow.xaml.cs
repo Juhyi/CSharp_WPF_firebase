@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using FirestoreDocumentReference = Google.Cloud.Firestore.DocumentReference;
+using System;
 
 namespace smartbox_function1
 {
@@ -43,12 +44,13 @@ namespace smartbox_function1
             }
         }
 
-        // 전화번호로 보관함 번호, 비밀번호 검색
-        async Task Search(string phone)  
+        // 박스번호(document) 검색
+        async Task Search(string boxNum)
         {
-            FirestoreDocumentReference docref = db.Collection("keep").Document($"{phone}");
+            FirestoreDocumentReference docref = db.Collection("keep").Document($"{boxNum}");
             DocumentSnapshot snap = await docref.GetSnapshotAsync();
 
+            txtBox.Clear();
             if (snap.Exists)
             {
                 Dictionary<string, object> city = snap.ToDictionary();
@@ -60,7 +62,29 @@ namespace smartbox_function1
 
         }
 
+        // 전화번호(filed) 검색하기
+        async Task SearchByBoxNumber(string phone)
+        {
+            Query qref = db.Collection("keep").WhereEqualTo("PhoneNumber", phone);
+            QuerySnapshot snap = await qref.GetSnapshotAsync();
 
+            MessageBox.Show("저장 정보 출력");
+
+            txtBox.Clear(); // 이전 검색 결과를 지웁니다.
+
+            foreach (DocumentSnapshot docsnap in snap)
+            {
+                FirebaseProperty fp = docsnap.ConvertTo<FirebaseProperty>();
+
+                if (docsnap.Exists)
+                {
+                    txtBox.Text += fp.PhoneNumber + "\n";
+                    txtBox1.Text += fp.BoxNumber + "\n\n";
+                    txtBox2.Text += fp.Password + "\n\n\n";
+
+                }
+            }
+        }
 
         // 난수로 비번 생성 메서드
         private string GeneratePassword()
@@ -71,25 +95,43 @@ namespace smartbox_function1
         }
 
         // 전화번호, 보관함 번호 입력 메서드
-        void Join(string phone, string boxNum)
+        void Join(string boxNum, string phone)
         {
             string password = GeneratePassword();
 
-            FirestoreDocumentReference DOC = db.Collection("keep").Document($"{phone}");
+            FirestoreDocumentReference DOC = db.Collection("keep").Document($"{boxNum}");
             Dictionary<string, object> data1 = new Dictionary<string, object>()
             {
-                {"PhoneNumber", phone },
-                {"BoxNumber", boxNum },
-                {"password", password}
+                {"BoxNumber", boxNum},
+                {"Password",  password},
+                {"PhoneNumber", phone},
             };
             DOC.SetAsync(data1);
 
-            MessageBox.Show($"보관이 완료되었습니다.택배함 번호 : {boxNum}, 비밀번호는 {password}입니다.");
+            MessageBox.Show($" 보관함 문이 열렸습니다. 보관함 번호 : {boxNum}, 비밀번호는 {password}입니다.");
             //txtPwd.Text = password;
             //txtBox.Text = boxNum;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        // 보관함 검색 메서드 
+        async Task<bool> FindBoxNum(string boxNum)
+        {
+            Query qref = db.Collection("keep").WhereEqualTo("BoxNumber", boxNum);
+            QuerySnapshot snap = await qref.GetSnapshotAsync();
+
+            foreach (DocumentSnapshot docsnap in snap)
+            {
+                if (docsnap.Exists)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+        // 보관 선택 클릭 이벤트 헨들러
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
             string phone = txtphone.Text;
             string boxNum = selectedBoxNum;
@@ -100,8 +142,18 @@ namespace smartbox_function1
                 return;
             }
 
-            Join(phone, boxNum);
-            //MessageBox.Show($"보관이 완료되었습니다. 택배함 번호 : {boxNum} 비밀번호 : {password}");
+            bool checkBoxEmpty = await FindBoxNum(boxNum);
+            if (checkBoxEmpty == true)
+            {
+                MessageBox.Show("이미 사용중인 보관함입니다.");
+                return;
+            }
+
+            else
+            {
+                Join(phone, boxNum);
+                MessageBox.Show("보관이 완료되었습니다.");
+            }
         }
 
 
@@ -120,20 +172,40 @@ namespace smartbox_function1
                 return;
             }
 
-           
+
             MessageBox.Show($"선택된 택배함 번호는 {boxNum}입니다.");
         }
 
-        // 검색버큰 클릭 이벤트 헨들링
+        // document 검색 클릭 이벤트 헨들러 (박스번호)
         private async void Serchbtn_Click(object sender, RoutedEventArgs e)
         {
-            string PhoneNum = TxtSearchPhone.Text;
+            
 
-            await Search(PhoneNum);
+            string PhoneNumber = TxtSearchPhone.Text;
+
+
+            await SearchByBoxNumber(PhoneNumber);
 
         }
 
+        // 찾기 버튼 클릭 이벤트 헨들러
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            string PhoneNumber = TxtSearchPhone.Text;
 
+            FirestoreDocumentReference docref = db.Collection("keep").Document($"{PhoneNumber}");
+            await docref.DeleteAsync();
+            MessageBox.Show("보관함이 열렸습니다. 보관함에서 물건을 찾아가십시오.");
 
+        }
+
+        // 필드 검색 클릭 이벤트 핸들러 (전화번호)
+
+        private async void SerchBoxbtn_Click(object sender, RoutedEventArgs e)
+        {
+            string PhoneNumber = TxtSearchPhone.Text;
+
+            await Search(PhoneNumber);
+        }
     }
 }
